@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+    public static final String YANDEX_BOT = "YandexBot";
+    public static final String GOOGLE_BOT = "GoogleBot";
+
     public static void main(String[] args) {
         int cnt = 0;
         while (true) {
@@ -27,17 +30,32 @@ public class Main {
                         new BufferedReader(fileReader);
                 String line;
                 int cntLines = 0;
+                int cntYandexBot = 0;
+                int cntGoogleBot = 0;
                 List<Integer> cntLength = new ArrayList<>();
+                List<Line> lines = new ArrayList<>();
+                LineHelper lineHelper = new LineHelper();
                 while ((line = reader.readLine()) != null) {
                     int length = line.length();
                     cntLength.add(length);
                     if (length > 1024)
                         throw new RuntimeException("Строка длиннее 1024 символа. Длина строки = " + length);
+
+                    Line stringLine = lineHelper.getLineFromString(line);
+                    lines.add(stringLine);
                     cntLines++;
+                    String bot = lineHelper.getBot(stringLine.getUserAgent());
+                    if (bot.equalsIgnoreCase(YANDEX_BOT)) cntYandexBot++;
+                    if (bot.equalsIgnoreCase(GOOGLE_BOT)) cntGoogleBot++;
                 }
                 System.out.println("Общее кол-во строк в файле = " + cntLines);
-                System.out.println("Строка с наибольшей длиной = " + getMaxCnt(cntLength));
-                System.out.println("Строка с наименьшей длиной = " + getMinCnt(cntLength));
+                System.out.println("Количество " + GOOGLE_BOT + ": " + cntGoogleBot);
+                System.out.println("Количество " + YANDEX_BOT + ": " + cntYandexBot);
+                System.out.println("Доля " + GOOGLE_BOT + " от общего числа строк: "
+                        + lineHelper.getShereOtTotal(cntLines, cntGoogleBot) + "%");
+                System.out.println("Доля " + YANDEX_BOT + " от общего числа строк: "
+                        + lineHelper.getShereOtTotal(cntLines, cntYandexBot) + "%");
+                System.out.println("===========");
             } catch (IOException e) {
                 e.printStackTrace();
             }
