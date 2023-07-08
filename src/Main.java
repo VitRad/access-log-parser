@@ -2,14 +2,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static final String YANDEX_BOT = "YandexBot";
-    public static final String GOOGLE_BOT = "GoogleBot";
-
     public static void main(String[] args) {
         int cnt = 0;
         while (true) {
@@ -30,31 +28,26 @@ public class Main {
                         new BufferedReader(fileReader);
                 String line;
                 int cntLines = 0;
-                int cntYandexBot = 0;
-                int cntGoogleBot = 0;
-                List<Integer> cntLength = new ArrayList<>();
-                List<Line> lines = new ArrayList<>();
-                LineHelper lineHelper = new LineHelper();
+                List<LogEntry> logEntries = new ArrayList<>();
+                Statistics statistics = new Statistics();
                 while ((line = reader.readLine()) != null) {
                     int length = line.length();
-                    cntLength.add(length);
-                    if (length > 1024)
+                    if (length > 1024) {
                         throw new RuntimeException("Строка длиннее 1024 символа. Длина строки = " + length);
-
-                    Line stringLine = lineHelper.getLineFromString(line);
-                    lines.add(stringLine);
+                    }
+                    LogEntry logEntry = new LogEntry(line);
+                    statistics.addEntry(logEntry);
+                    logEntries.add(logEntry);
                     cntLines++;
-                    String bot = lineHelper.getBot(stringLine.getUserAgent());
-                    if (bot.equalsIgnoreCase(YANDEX_BOT)) cntYandexBot++;
-                    if (bot.equalsIgnoreCase(GOOGLE_BOT)) cntGoogleBot++;
                 }
                 System.out.println("Общее кол-во строк в файле = " + cntLines);
-                System.out.println("Количество " + GOOGLE_BOT + ": " + cntGoogleBot);
-                System.out.println("Количество " + YANDEX_BOT + ": " + cntYandexBot);
-                System.out.println("Доля " + GOOGLE_BOT + " от общего числа строк: "
-                        + lineHelper.getShereOtTotal(cntLines, cntGoogleBot) + "%");
-                System.out.println("Доля " + YANDEX_BOT + " от общего числа строк: "
-                        + lineHelper.getShereOtTotal(cntLines, cntYandexBot) + "%");
+                System.out.println("Общий объем трафика:" + statistics.getTotalTraffic());
+                System.out.println("Средний объем трафика в час:" + statistics.getTrafficRate());
+                System.out.println("Минимальное время:"+ statistics.getMinTime());
+                System.out.println("Максимальное время:" + statistics.getMaxTime());
+                System.out.println("Всего часов:" + Duration.between(statistics.getMinTime(), statistics.getMaxTime())
+                        .getSeconds() / 3600);
+                System.out.println("logEntries.get(10000):"+logEntries.get(10000));
                 System.out.println("===========");
             } catch (IOException e) {
                 e.printStackTrace();
