@@ -69,14 +69,14 @@ public class LogEntry {
 
     @Override
     public String toString() {
-        return "LogEntry{" +'\n'+
+        return "LogEntry{" + '\n' +
                 "ipAddr=" + ipAddr + '\n' +
                 ", time=" + time + '\n' +
                 ", httpMethod=" + httpMethod + '\n' +
                 ", path=" + path + '\n' +
                 ", responseCode=" + responseCode + '\n' +
                 ", responseSize=" + responseSize + '\n' +
-                ", referer=" + referer +  '\n' +
+                ", referer=" + referer + '\n' +
                 ", userAgent=" + userAgent +
                 '}';
     }

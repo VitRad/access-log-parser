@@ -43,11 +43,14 @@ public class Main {
                 System.out.println("Общее кол-во строк в файле = " + cntLines);
                 System.out.println("Общий объем трафика:" + statistics.getTotalTraffic());
                 System.out.println("Средний объем трафика в час:" + statistics.getTrafficRate());
-                System.out.println("Минимальное время:"+ statistics.getMinTime());
+                System.out.println("Минимальное время:" + statistics.getMinTime());
                 System.out.println("Максимальное время:" + statistics.getMaxTime());
                 System.out.println("Всего часов:" + Duration.between(statistics.getMinTime(), statistics.getMaxTime())
                         .getSeconds() / 3600);
-                System.out.println("logEntries.get(10000):"+logEntries.get(10000));
+//                System.out.println("logEntries.get(10000):" + logEntries.get(10000));
+                System.out.println("statistics.getPageSet():" + statistics.getPageSet());
+                System.out.println("statistics.getMapOsCnt():" + statistics.getMapOsCnt());
+                System.out.println("statistics.getPartOsFromAll():"+statistics.getPartOsFromAll());
                 System.out.println("===========");
             } catch (IOException e) {
                 e.printStackTrace();
