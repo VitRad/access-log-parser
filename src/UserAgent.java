@@ -20,7 +20,10 @@ public class UserAgent {
             int idx3 = s.lastIndexOf(' ');
             int idx4 = s.lastIndexOf('/');
             if (idx3 < idx4) {
-                this.browser = s.substring(s.lastIndexOf(' ') + 1, s.lastIndexOf('/'));
+                String str = s.substring(s.lastIndexOf(' ') + 1, s.lastIndexOf('/'));
+                if (str.toLowerCase().contains("http") || str.contains(";")) {
+                    this.browser = "";
+                } else this.browser = str;
             } else this.browser = "";
         } else {
             this.typeOS = "";
